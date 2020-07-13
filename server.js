@@ -22,6 +22,15 @@ app.use(express.json());
 app.use(cors());
 
 
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+    app.get('*', (request, response) => {
+        response.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+}
+
+
+
 app.get('/', (req,res) => {res.send('App is working')})
 app.post('/signin', (req,res) => {(signin.handleSignin(req,res,db,bcrypt))}) 
 app.post('/register', (req,res) => {(register.handleRegister(req,res,db,bcrypt))})
